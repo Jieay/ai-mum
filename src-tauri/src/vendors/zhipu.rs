@@ -45,14 +45,28 @@ impl Vendor for ZhipuVendor {
         let body: Value = serde_json::from_str(&raw)
             .map_err(|e| format!("Parse error: {} | raw: {}", e, &raw[..raw.len().min(500)]))?;
 
-        if body.get("success").and_then(|v| v.as_bool()).unwrap_or(false) == false {
-            let msg = body.get("msg").and_then(|v| v.as_str()).unwrap_or("Unknown error");
+        if !body
+            .get("success")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false)
+        {
+            let msg = body
+                .get("msg")
+                .and_then(|v| v.as_str())
+                .unwrap_or("Unknown error");
             return Err(msg.to_string());
         }
 
         let data = body.get("data").ok_or("No data in response")?;
-        let level = data.get("level").and_then(|v| v.as_str()).unwrap_or("unknown").to_string();
-        let limits = data.get("limits").and_then(|v| v.as_array()).ok_or("No limits in response")?;
+        let level = data
+            .get("level")
+            .and_then(|v| v.as_str())
+            .unwrap_or("unknown")
+            .to_string();
+        let limits = data
+            .get("limits")
+            .and_then(|v| v.as_array())
+            .ok_or("No limits in response")?;
 
         let now = chrono::Utc::now().to_rfc3339();
 
@@ -70,7 +84,10 @@ impl Vendor for ZhipuVendor {
         let mut quotas = Vec::new();
 
         if let Some(five_hour) = tokens_limits.first() {
-            let pct = five_hour.get("percentage").and_then(|v| v.as_f64()).unwrap_or(0.0);
+            let pct = five_hour
+                .get("percentage")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
             let reset_ts = five_hour.get("nextResetTime").and_then(|v| v.as_i64());
             let reset_time = reset_ts.map(|ts| {
                 chrono::DateTime::from_timestamp(ts / 1000, 0)
@@ -89,7 +106,10 @@ impl Vendor for ZhipuVendor {
         }
 
         if let Some(weekly) = tokens_limits.get(1) {
-            let pct = weekly.get("percentage").and_then(|v| v.as_f64()).unwrap_or(0.0);
+            let pct = weekly
+                .get("percentage")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
             let reset_ts = weekly.get("nextResetTime").and_then(|v| v.as_i64());
             let reset_time = reset_ts.map(|ts| {
                 chrono::DateTime::from_timestamp(ts / 1000, 0)
@@ -107,11 +127,24 @@ impl Vendor for ZhipuVendor {
             });
         }
 
-        for limit in limits.iter().filter(|l| l.get("type").and_then(|v| v.as_str()) == Some("TIME_LIMIT")) {
+        for limit in limits
+            .iter()
+            .filter(|l| l.get("type").and_then(|v| v.as_str()) == Some("TIME_LIMIT"))
+        {
             let total = limit.get("usage").and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let used = limit.get("currentValue").and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let remaining = limit.get("remaining").and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let pct = if total > 0.0 { (used / total) * 100.0 } else { 0.0 };
+            let used = limit
+                .get("currentValue")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let remaining = limit
+                .get("remaining")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let pct = if total > 0.0 {
+                (used / total) * 100.0
+            } else {
+                0.0
+            };
             quotas.push(QuotaInfo {
                 quota_type: "mcp_monthly".to_string(),
                 label: "MCP 工具调用（月）".to_string(),

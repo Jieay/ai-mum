@@ -76,7 +76,10 @@ impl Vendor for KimiVendor {
                 let used = parse_number(detail.get("used"));
                 let total = parse_number(detail.get("limit"));
                 let remaining = parse_number(detail.get("remaining"));
-                let reset_time = detail.get("resetTime").and_then(|v| v.as_str()).map(|s| s.to_string());
+                let reset_time = detail
+                    .get("resetTime")
+                    .and_then(|v| v.as_str())
+                    .map(|s| s.to_string());
                 quotas.push(QuotaInfo {
                     quota_type: "5hour".to_string(),
                     label: "5 小时额度".to_string(),

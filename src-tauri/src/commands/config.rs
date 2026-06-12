@@ -33,9 +33,7 @@ pub fn save_config_file(config: &AppConfig) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub async fn get_config(
-    state: State<'_, Mutex<AppState>>,
-) -> Result<AppConfig, String> {
+pub async fn get_config(state: State<'_, Mutex<AppState>>) -> Result<AppConfig, String> {
     let s = state.lock().map_err(|e| e.to_string())?;
     Ok(s.config.clone())
 }

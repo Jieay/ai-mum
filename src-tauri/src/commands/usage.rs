@@ -6,9 +6,7 @@ use crate::models::{AppState, UsageData};
 use crate::scheduler;
 
 #[tauri::command]
-pub async fn get_usage(
-    state: State<'_, Mutex<AppState>>,
-) -> Result<Vec<UsageData>, String> {
+pub async fn get_usage(state: State<'_, Mutex<AppState>>) -> Result<Vec<UsageData>, String> {
     let s = state.lock().map_err(|e| e.to_string())?;
     Ok(s.cached_usage.clone())
 }

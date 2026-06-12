@@ -1,6 +1,11 @@
 # AI Model Usage Monitor
 
+[![CI](https://github.com/Jieay/ai-model-usage-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/Jieay/ai-model-usage-monitor/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 轻量级 macOS 桌面工具，实时展示大模型编程套餐的用量额度。
+
+> ⚠️ 当前为早期版本，仅支持 macOS。Windows / Linux 适配计划见 [PLAN.md](PLAN.md)。
 
 ## 功能
 
@@ -11,6 +16,30 @@
 - 每 5 分钟自动刷新（可配置）
 - 深色模式跟随系统
 - 资源占用极低（内存 ~30MB，安装包 ~12MB）
+
+## 截图
+
+![应用主界面](docs/screenshot.png)
+
+> 如未生成截图，可运行 `make dev` 后截取主界面替换 `docs/screenshot.png`。
+
+## 下载安装
+
+### 直接下载（推荐）
+
+从 [GitHub Releases](https://github.com/Jieay/ai-model-usage-monitor/releases/latest) 下载最新版 `.dmg` 安装包。
+
+> 仓库链接中的 `Jieay/ai-model-usage-monitor` 需替换为你的实际用户名/仓库名。
+
+### 首次打开提示"无法验证开发者"
+
+因为没有 Apple Developer 签名，用户首次打开时会遇到系统安全提示。解决方法：
+
+1. 右键点击 `.app` 或 `.dmg`，选择「打开」
+2. 在弹出的对话框中点击「打开」确认
+3. 或在「系统设置 → 隐私与安全性」中点击「仍要打开」
+
+这是所有非 App Store 分发的 macOS 应用的正常行为。
 
 ## 技术栈
 
@@ -118,16 +147,6 @@ zip -r "../../../../../AI-Usage-Monitor-macOS.zip" "AI Usage Monitor.app"
 
 用户下载后解压，拖入 `/Applications` 即可使用。
 
-### 首次打开提示"无法验证开发者"
-
-因为没有 Apple Developer 签名，用户首次打开时会遇到系统安全提示。解决方法：
-
-1. 右键点击 `.app` 或 `.dmg`，选择「打开」
-2. 在弹出的对话框中点击「打开」确认
-3. 或在「系统设置 → 隐私与安全性」中点击「仍要打开」
-
-这是所有非 App Store 分发的 macOS 应用的正常行为。
-
 ## 使用
 
 1. 启动应用，点击右上角齿轮图标打开设置
@@ -158,5 +177,21 @@ oh-my-aimodelusage/
 │   ├── Cargo.toml
 │   └── tauri.conf.json
 ├── PLAN.md                     # 项目规划文档
-└── docs/ui-preview.html        # UI 设计预览
+├── docs/ui-preview.html        # UI 设计预览
+└── LICENSE                     # MIT 许可证
 ```
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 许可证
+
+[MIT](LICENSE)
+
+## 致谢
+
+- [Tauri](https://tauri.app/)
+- [Vue.js](https://vuejs.org/)
+- [智谱 AI](https://open.bigmodel.cn/)
+- [Kimi Code](https://www.kimi.com/code)
