@@ -1,0 +1,44 @@
+:root {
+  --color-bg: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #636366;
+  --color-text-tertiary: #86868b;
+  --color-border: #f0f0f0;
+  --color-border-strong: #e5e5e5;
+
+  --color-zhipu: #4f6ef7;
+  --color-zhipu-light: #e8f0fe;
+  --color-kimi: #6c5ce7;
+  --color-kimi-light: #f0eafc;
+
+  --color-success: #34c759;
+  --color-warning: #ffcc00;
+  --color-danger: #ff3b30;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1c1c1e;
+    --color-surface: #2c2c2e;
+    --color-text-primary: #f5f5f7;
+    --color-text-secondary: #a1a1a6;
+    --color-text-tertiary: #636366;
+    --color-border: #3a3a3c;
+    --color-border-strong: #48484a;
+    --color-zhipu-light: rgba(79, 110, 247, 0.15);
+    --color-kimi-light: rgba(108, 92, 231, 0.15);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+}

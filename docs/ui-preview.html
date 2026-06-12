@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Model Usage Monitor - UI Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 420px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .app-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      color: #86868b;
+      margin-top: 2px;
+    }
+
+    .refresh-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f5f5f7;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .refresh-btn:hover { background: #e8e8ed; }
+
+    .refresh-btn.spinning svg {
+      animation: spin 1s linear;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Vendor Card */
+    .vendor-card {
+      margin: 16px;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid #f0f0f0;
+      transition: box-shadow 0.2s;
+    }
+
+    .vendor-card:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .vendor-card.zhipu {
+      border-left: 3px solid #4f6ef7;
+    }
+
+    .vendor-card.kimi {
+      border-left: 3px solid #6c5ce7;
+    }
+
+    .vendor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .vendor-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vendor-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .vendor-icon.zhipu { background: linear-gradient(135deg, #4f6ef7, #3b5de7); }
+    .vendor-icon.kimi { background: linear-gradient(135deg, #6c5ce7, #a855f7); }
+
+    .vendor-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .vendor-plan {
+      font-size: 11px;
+      color: #86868b;
+      margin-top: 1px;
+    }
+
+    .plan-badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .plan-badge.pro {
+      background: #e8f0fe;
+      color: #4f6ef7;
+    }
+
+    .plan-badge.andante {
+      background: #f0eafc;
+      color: #6c5ce7;
+    }
+
+    /* Quota Row */
+    .quota-row {
+      margin-bottom: 14px;
+    }
+
+    .quota-row:last-child { margin-bottom: 0; }
+
+    .quota-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .quota-label {
+      font-size: 13px;
+      color: #424245;
+      font-weight: 500;
+    }
+
+    .quota-value {
+      font-size: 12px;
+      color: #86868b;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .quota-value strong {
+      color: #1d1d1f;
+      font-weight: 600;
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+
+    .progress-fill.green { background: linear-gradient(90deg, #34c759, #30d158); }
+    .progress-fill.yellow { background: linear-gradient(90deg, #ffcc00, #ffd60a); }
+    .progress-fill.orange { background: linear-gradient(90deg, #ff9500, #ffb340); }
+    .progress-fill.red { background: linear-gradient(90deg, #ff3b30, #ff6961); }
+
+    .progress-fill.zhipu { background: linear-gradient(90deg, #4f6ef7, #7b93f9); }
+    .progress-fill.kimi { background: linear-gradient(90deg, #6c5ce7, #a855f7); }
+
+    /* Reset Time */
+    .reset-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .reset-label {
+      font-size: 11px;
+      color: #86868b;
+    }
+
+    .reset-time {
+      font-size: 11px;
+      color: #4f6ef7;
+      font-weight: 500;
+    }
+
+    .reset-time.kimi { color: #6c5ce7; }
+
+    /* Footer */
+    .app-footer {
+      padding: 12px 20px;
+      text-align: center;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: #c7c7cc;
+    }
+
+    /* MCP Badge */
+    .mcp-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: #fafafa;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .mcp-label {
+      font-size: 12px;
+      color: #636366;
+    }
+
+    .mcp-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    /* Status dot */
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .status-dot.online { background: #34c759; }
+    .status-dot.offline { background: #ff3b30; }
+
+    /* Window Controls (macOS style) */
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .window-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .window-dot.close { background: #ff5f57; }
+    .window-dot.minimize { background: #ffbd2e; }
+    .window-dot.maximize { background: #28c840; }
+
+    /* Mock window chrome */
+    .mock-window {
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .window-titlebar {
+      background: #f6f6f6;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .window-titlebar-text {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: #424245;
+    }
+
+    .window-body {
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align: center; margin-bottom: 8px; font-size: 22px; font-weight: 700; letter-spacing: -0.5px;">
+    AI Model Usage Monitor
+  </h2>
+  <p style="text-align: center; margin-bottom: 24px; font-size: 13px; color: #86868b;">
+    UI Preview - Card Style Layout
+  </p>
+
+  <!-- Main App Mock -->
+  <div style="max-width: 420px; margin: 0 auto;">
+    <div class="mock-window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot close"></div>
+          <div class="window-dot minimize"></div>
+          <div class="window-dot maximize"></div>
+        </div>
+        <div class="window-titlebar-text">AI Usage Monitor</div>
+        <div style="width: 52px;"></div>
+      </div>
+
+      <div class="window-body">
+        <div class="app-container" style="box-shadow: none; border-radius: 0;">
+          <!-- Header -->
+          <div class="app-header">
+            <div>
+              <div class="app-title">
+                <span class="status-dot online"></span>
+                Model Usage
+              </div>
+              <div class="app-subtitle">Updated 2 min ago</div>
+            </div>
+            <button class="refresh-btn" title="Refresh">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 智谱 Card -->
+          <div class="vendor-card zhipu">
+            <div class="vendor-header">
+              <div class="vendor-info">
+                <div class="vendor-icon zhipu">智</div>
+                <div>
+                  <div class="vendor-name">智谱 GLM Coding Plan</div>
+                  <div class="vendor-plan">GLM-5.1 / GLM-4.7 / GLM-4.5-Air</div>
+                </div>
+              </div>
+              <span class="plan-badge pro">Pro</span>
+            </div>
+
+            <!-- 5-hour quota -->
+            <div class="quota-row">
+              <div class="quota-label-row">
+                <span class="quota-label">5 小时额度</span>
+                <span class="quota-value"><strong>265</strong> / 400 prompts</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill zhipu" style="width: 33.75%;"></div>
+              </div>
+            </div>
+
+            <!-- Weekly quota -->
+            <div class="quota-row">
+              <div class="quota-label-row">
+                <span class="quota-label">每周额度</span>
+                <span class="quota-value"><strong>1,120</strong> / 2,000 prompts</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill zhipu" style="width: 56%;"></div>
+              </div>
+            </div>
+
+            <!-- MCP -->
+            <div class="mcp-row">
+              <span class="mcp-label">MCP 工具调用（月）</span>
+              <span class="mcp-value">328 / 1,000 次</span>
+            </div>
+
+            <div class="reset-info">
+              <span class="reset-label">5h 周期重置</span>
+              <span class="reset-time">2h 15m 后刷新</span>
+            </div>
+          </div>
+
+          <!-- Kimi Card -->
+          <div class="vendor-card kimi">
+            <div class="vendor-header">
+              <div class="vendor-info">
+                <div class="vendor-icon kimi">K</div>
+                <div>
+                  <div class="vendor-name">Kimi Code</div>
+                  <div class="vendor-plan">Kimi K2.5 / kimi-for-coding</div>
+                </div>
+              </div>
+              <span class="plan-badge andante">Andante</span>
+            </div>
+
+            <!-- 5-hour quota -->
+            <div class="quota-row">
+              <div class="quota-label-row">
+                <span class="quota-label">5 小时额度</span>
+                <span class="quota-value"><strong>486</strong> / ~800 requests</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill kimi" style="width: 60.75%;"></div>
+              </div>
+            </div>
+
+            <!-- Weekly quota -->
+            <div class="quota-row">
+              <div class="quota-label-row">
+                <span class="quota-label">每周额度</span>
+                <span class="quota-value"><strong>2,150</strong> / ~5,600 requests</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill kimi" style="width: 38.4%;"></div>
+              </div>
+            </div>
+
+            <div class="reset-info">
+              <span class="reset-label">5h 窗口重置</span>
+              <span class="reset-time kimi">1h 42m 后刷新</span>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="app-footer">
+            <span class="footer-text">Auto refresh every 5 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="max-width: 420px; margin: 24px auto 0; text-align: center;">
+    <p style="font-size: 12px; color: #86868b; line-height: 1.6;">
+      Design Notes: macOS native window chrome, compact card layout, <br>
+      color-coded progress bars per vendor, minimal footprint <br>
+      (fits in a small floating window or system tray popup)
+    </p>
+  </div>
+</body>
+</html>
