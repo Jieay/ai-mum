@@ -30,7 +30,23 @@
 - Node.js 18+
 - Xcode Command Line Tools（`xcode-select --install`）
 
-### 启动开发模式
+### 快捷命令
+
+项目提供了 `Makefile`，所有常用操作均可通过 `make` 命令执行：
+
+```bash
+make install-deps    # 安装前后端依赖（首次克隆后执行）
+make dev             # 启动开发模式（热重载）
+make build           # 构建正式包
+make dist            # 构建并显示产物信息
+make check           # 检查前后端编译是否通过（不构建）
+make open            # 构建并直接打开 .app
+make clean           # 清理所有构建产物和依赖
+```
+
+### 手动操作
+
+如果不使用 `make`，也可以直接用 npm 命令：
 
 ```bash
 # 安装前端依赖
@@ -38,24 +54,17 @@ npm install
 
 # 启动开发服务器（热重载）
 npm run tauri dev
-```
 
-首次启动会自动编译 Rust 后端，之后前后端修改均支持热重载。
-
-### 构建
-
-```bash
+# 构建
 npm run tauri build
 ```
-
-构建产物在 `src-tauri/target/release/bundle/` 目录下。
 
 ## 打包 Mac 安装包（.dmg）
 
 ### 方式一：自动打包（推荐）
 
 ```bash
-npm run tauri build
+make build
 ```
 
 Tauri 会自动生成以下产物：
@@ -72,7 +81,7 @@ Tauri 会自动生成以下产物：
 brew install create-dmg
 ```
 
-安装后重新执行 `npm run tauri build` 即可。
+安装后重新执行 `make build` 即可。
 
 ### 方式二：手动打包 .dmg
 
@@ -80,7 +89,7 @@ brew install create-dmg
 
 ```bash
 # 1. 先构建 .app
-npm run tauri build
+make build
 
 # 2. 手动创建 .dmg
 create-dmg \
@@ -100,7 +109,7 @@ create-dmg \
 
 ```bash
 # 构建
-npm run tauri build
+make build
 
 # 压缩
 cd src-tauri/target/release/bundle/macos
