@@ -5,6 +5,7 @@ use tauri::{AppHandle, Emitter, Manager};
 
 use crate::cache;
 use crate::models::{AppState, UsageData};
+use crate::vendors::kimi::KimiVendor;
 use crate::vendors::zhipu::ZhipuVendor;
 use crate::vendors::Vendor;
 
@@ -25,6 +26,22 @@ pub async fn do_refresh(app: &AppHandle) -> Result<Vec<UsageData>, String> {
             Err(e) => results.push(UsageData {
                 vendor_id: zhipu.id().to_string(),
                 vendor_name: zhipu.name().to_string(),
+                plan_level: String::new(),
+                quotas: vec![],
+                last_updated: now.clone(),
+                is_error: true,
+                error_message: Some(e),
+            }),
+        }
+    }
+
+    let kimi = KimiVendor::new();
+    if !config.kimi_api_key.is_empty() {
+        match kimi.fetch_usage(&config.kimi_api_key).await {
+            Ok(data) => results.push(data),
+            Err(e) => results.push(UsageData {
+                vendor_id: kimi.id().to_string(),
+                vendor_name: kimi.name().to_string(),
                 plan_level: String::new(),
                 quotas: vec![],
                 last_updated: now.clone(),

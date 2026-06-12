@@ -22,6 +22,7 @@ macOS 桌面工具，用卡片式仪表盘展示大模型编程套餐（智谱 G
 │  ┌────────────────────────────────┐ │
 │  │  Rust Backend                  │ │
 │  │  vendors/zhipu.rs ──HTTP──► 智谱API│
+│  │  vendors/kimi.rs ──HTTP──► Kimi API│
 │  │  scheduler.rs ──5min poll─────► │ │
 │  │  cache.rs ◄── ~/.ai-usage-monitor/│
 │  │  commands/* ◄── Tauri Commands──│ │
@@ -75,6 +76,7 @@ macOS 桌面工具，用卡片式仪表盘展示大模型编程套餐（智谱 G
 │       │   └── config.rs         # get_config / save_config + 文件 I/O
 │       └── vendors/
 │           ├── mod.rs            # Vendor trait 定义
+│           ├── kimi.rs           # Kimi Code API 对接
 │           └── zhipu.rs          # 智谱 API 对接（动态 JSON 解析）
 │
 ├── Makefile                      # 快捷命令
@@ -162,6 +164,18 @@ Authorization: {api_key}
 - `TIME_LIMIT` → MCP 月额度（`currentValue` = 已用，`usage` = 总量，`remaining` = 剩余）
 - `nextResetTime` 为毫秒时间戳（i64），转为 ISO 8601 字符串传给前端
 
+## Kimi Code API
+
+```
+GET https://api.kimi.com/coding/v1/usages
+Authorization: Bearer {api_key}
+```
+
+关键映射：
+- `usage` → 每周额度（`limit` / `used` / `remaining` / `resetTime`）
+- `limits` 中 `window.duration = 300` 且 `window.timeUnit = TIME_UNIT_MINUTE` 的项 → 5 小时额度
+- `user.membership.level` → 套餐等级，`LEVEL_INTERMEDIATE` 映射为 `allegretto`
+
 ## 用户数据存储
 
 ```
@@ -207,7 +221,6 @@ make clean           # 清理
 
 ## 已知限制
 
-- **Kimi**：暂无公开用量查询 API，已预留接口
 - **iOS**：需要 Apple Developer 账号才能部署到真机
 - **DMG 打包**：需额外安装 `brew install create-dmg`
 - **无签名**：用户首次打开需右键→「打开」绕过 Gatekeeper

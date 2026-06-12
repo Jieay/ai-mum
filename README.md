@@ -5,7 +5,7 @@
 ## 功能
 
 - **智谱 GLM Coding Plan** — 5 小时额度 / 每周额度 / MCP 工具调用额度
-- **Kimi Code** — 预留接口，待官方 API 确认后接入
+- **Kimi Code** — 5 小时额度 / 每周额度
 - 卡片式仪表盘，百分比进度条 + 重置倒计时
 - 系统托盘常驻，左键切换窗口，右键菜单操作
 - 每 5 分钟自动刷新（可配置）
@@ -131,7 +131,9 @@ zip -r "../../../../../AI-Usage-Monitor-macOS.zip" "AI Usage Monitor.app"
 ## 使用
 
 1. 启动应用，点击右上角齿轮图标打开设置
-2. 填入智谱 API Key（在 [open.bigmodel.cn](https://open.bigmodel.cn) 获取）
+2. 填入 API Key
+   - 智谱：在 [open.bigmodel.cn](https://open.bigmodel.cn) 获取
+   - Kimi Code：在 [Kimi Code 控制台](https://www.kimi.com/code) 创建 API Key
 3. 点击 Save，数据会自动拉取并展示
 4. 应用最小化后会收入系统托盘，点击托盘图标可重新打开
 
@@ -150,6 +152,7 @@ oh-my-aimodelusage/
 │   │   ├── lib.rs              # 入口（托盘、命令注册）
 │   │   ├── models.rs           # 数据模型
 │   │   ├── vendors/zhipu.rs    # 智谱 API 对接
+│   │   ├── vendors/kimi.rs     # Kimi Code API 对接
 │   │   ├── scheduler.rs        # 定时刷新
 │   │   └── cache.rs            # 本地缓存
 │   ├── Cargo.toml

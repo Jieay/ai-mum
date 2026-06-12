@@ -6,4 +6,5 @@ pub trait Vendor: Send + Sync {
     async fn fetch_usage(&self, api_key: &str) -> Result<UsageData, String>;
 }
 
+pub mod kimi;
 pub mod zhipu;

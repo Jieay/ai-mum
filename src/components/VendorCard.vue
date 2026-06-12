@@ -24,6 +24,13 @@ const planLabel = computed(() => {
   const level = props.data.plan_level
   return level.charAt(0).toUpperCase() + level.slice(1)
 })
+
+const vendorModelDesc = computed(() => {
+  if (props.data.vendor_id === 'zhipu') {
+    return 'GLM-5.1 / GLM-4.7 / GLM-4.5-Air'
+  }
+  return 'kimi-for-coding'
+})
 </script>
 
 <template>
@@ -37,7 +44,7 @@ const planLabel = computed(() => {
         <div class="vendor-icon" :class="vendorClass">{{ vendorInitial }}</div>
         <div>
           <div class="vendor-name">{{ data.vendor_name }}</div>
-          <div class="vendor-plan-sub">GLM-5.1 / GLM-4.7 / GLM-4.5-Air</div>
+          <div class="vendor-plan-sub">{{ vendorModelDesc }}</div>
         </div>
       </div>
       <span class="plan-badge" :class="planBadgeClass">{{ planLabel }}</span>
