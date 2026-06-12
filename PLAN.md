@@ -216,16 +216,11 @@ oh-my-aimodelusage/
 | Andante（¥49/月） | ~300-1,200 请求 | ~5,600 请求 | 30 |
 | Moderato（¥99/月） | 4x Andante | 4x Andante | 更高 |
 | Allegretto（¥199/月） | 更高 | 更高 | 更高 |
+| Allegro（¥699/月） | 更高 | 更高 | 更高 |
 
 #### 数据获取方案
 
-**⚠️ Kimi 暂无公开的用量查询 API。** 可行方案按优先级：
-
-1. **抓包分析控制台接口**（推荐）— 访问 Kimi Code 控制台时抓取 XHR 请求，找到用量查询的实际 API 端点，然后通过 API Key 认证直接调用
-2. **Cookie 登录态抓取** — 通过用户登录后的 Cookie 调用控制台内部接口
-3. **等待官方 API** — 已有 GitHub Issue 请求（MoonshotAI/Kimi-K2.5#16），持续关注
-
-> **实现建议**：先完成智谱的数据对接（有明确 API），Kimi 部分预留接口，待抓包确认后补充。
+已实现：通过 `GET https://api.kimi.com/coding/v1/usages` + `Authorization: Bearer {api_key}` 查询用量。
 
 ---
 
