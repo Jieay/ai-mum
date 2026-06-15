@@ -1,6 +1,6 @@
 # 贡献指南
 
-感谢你对 AI Model Usage Monitor 的兴趣！
+感谢你对 AI MUM 的兴趣！
 
 ## 开发环境
 

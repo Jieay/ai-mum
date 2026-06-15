@@ -18,12 +18,12 @@ clean:
 dist: build
 	@echo ""
 	@echo "Build output:"
-	@ls -lh src-tauri/target/release/ai-usage-monitor 2>/dev/null || true
+	@ls -lh src-tauri/target/release/ai-mum 2>/dev/null || true
 	@ls -lh src-tauri/target/release/bundle/macos/*.app 2>/dev/null || true
 	@ls -lh src-tauri/target/release/bundle/dmg/*.dmg 2>/dev/null || true
 
 open: build
-	open "src-tauri/target/release/bundle/macos/AI Usage Monitor.app"
+	open "src-tauri/target/release/bundle/macos/AI MUM.app"
 
 install-deps:
 	npm install

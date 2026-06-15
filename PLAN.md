@@ -1,10 +1,10 @@
-# AI Model Usage Monitor - 项目规划文档
+# AI MUM - 项目规划文档
 
 ## 1. 项目概述
 
 ### 1.1 项目名称
 
-AI Model Usage Monitor（暂定名：ModelLens）
+AI MUM（AI Model Usage Monitor）
 
 ### 1.2 项目目标
 
@@ -80,7 +80,7 @@ AI Model Usage Monitor（暂定名：ModelLens）
 ### 2.3 项目目录结构
 
 ```
-oh-my-aimodelusage/
+ai-mum/
 ├── src-tauri/                    # Rust 后端
 │   ├── Cargo.toml
 │   ├── tauri.conf.json           # Tauri 配置

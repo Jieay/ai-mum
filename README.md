@@ -1,9 +1,9 @@
-# AI Model Usage Monitor
+# AI MUM
 
-[![CI](https://github.com/Jieay/ai-model-usage-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/Jieay/ai-model-usage-monitor/actions/workflows/ci.yml)
+[![CI](https://github.com/Jieay/ai-mum/actions/workflows/ci.yml/badge.svg)](https://github.com/Jieay/ai-mum/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-轻量级 macOS 桌面工具，实时展示大模型编程套餐的用量额度。
+AI Model Usage Monitor 的简写，轻量级 macOS 桌面工具，实时展示大模型编程套餐的用量额度。
 
 > ⚠️ 当前为早期版本，仅支持 macOS。Windows / Linux 适配计划见 [PLAN.md](PLAN.md)。
 
@@ -100,9 +100,9 @@ Tauri 会自动生成以下产物：
 
 | 产物 | 路径 |
 |---|---|
-| 可执行文件 | `src-tauri/target/release/ai-usage-monitor` |
-| .app 包 | `src-tauri/target/release/bundle/macos/AI Usage Monitor.app` |
-| .dmg 安装包 | `src-tauri/target/release/bundle/dmg/AI Usage Monitor_0.1.0_aarch64.dmg` |
+| 可执行文件 | `src-tauri/target/release/ai-mum` |
+| .app 包 | `src-tauri/target/release/bundle/macos/AI MUM.app` |
+| .dmg 安装包 | `src-tauri/target/release/bundle/dmg/AI MUM_0.1.0_aarch64.dmg` |
 
 如果 `.dmg` 打包报错，通常是缺少 `create-dmg` 工具：
 
@@ -122,14 +122,14 @@ make build
 
 # 2. 手动创建 .dmg
 create-dmg \
-  --volname "AI Usage Monitor" \
+  --volname "AI MUM" \
   --window-pos 200 120 \
   --window-size 600 400 \
   --icon-size 100 \
-  --icon "AI Usage Monitor.app" 150 200 \
+  --icon "AI MUM.app" 150 200 \
   --app-drop-link 450 200 \
-  "AI Usage Monitor.dmg" \
-  "src-tauri/target/release/bundle/macos/AI Usage Monitor.app"
+  "AI MUM.dmg" \
+  "src-tauri/target/release/bundle/macos/AI MUM.app"
 ```
 
 ### 方式三：直接分发 .app
@@ -142,7 +142,7 @@ make build
 
 # 压缩
 cd src-tauri/target/release/bundle/macos
-zip -r "../../../../../AI-Usage-Monitor-macOS.zip" "AI Usage Monitor.app"
+zip -r "../../../../../AI-MUM-macOS.zip" "AI MUM.app"
 ```
 
 用户下载后解压，拖入 `/Applications` 即可使用。
@@ -159,7 +159,7 @@ zip -r "../../../../../AI-Usage-Monitor-macOS.zip" "AI Usage Monitor.app"
 ## 项目结构
 
 ```
-oh-my-aimodelusage/
+ai-mum/
 ├── src/                        # Vue 3 前端
 │   ├── views/Dashboard.vue     # 主面板
 │   ├── components/             # 卡片、进度条、设置弹窗
