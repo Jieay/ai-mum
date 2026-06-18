@@ -178,8 +178,8 @@ ai-mum/
 
 | 字段 | 含义 |
 |---|---|
-| `limits` 中 `TOKENS_LIMIT` | 按 `nextResetTime` 排序，第一个为 **5 小时额度**，第二个为 **每周额度** |
-| `limits` 中 `TIME_LIMIT` | MCP 工具每月调用额度（usage=总额, currentValue=已用, remaining=剩余） |
+| `limits` 中额度 | 根据 `unit` + `number` 字段识别：`(unit = 6, number = 1)` 为 **每周额度**，`(unit = 3, number = 5)` 为 **5 小时额度**，`(unit = 5, number = 1)` 为 **MCP 月额度** |
+| `TIME_LIMIT` 数据字段 | MCP 工具每月调用额度（usage=总额, currentValue=已用, remaining=剩余） |
 | `percentage` | 已使用百分比（0-100） |
 | `level` | 套餐等级：`lite` / `pro` / `max` |
 

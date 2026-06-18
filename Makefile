@@ -1,4 +1,17 @@
-.PHONY: dev build clean check lint dist open
+.PHONY: help dev build clean check lint dist open install-deps
+
+help:
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Targets:"
+	@echo "  dev          开发模式（热重载）"
+	@echo "  build        正式构建"
+	@echo "  check        编译检查（Rust + TypeScript）"
+	@echo "  lint         代码检查"
+	@echo "  dist         构建并显示产物"
+	@echo "  open         构建并打开应用"
+	@echo "  clean        清理构建产物"
+	@echo "  install-deps 安装依赖"
 
 dev:
 	npm run tauri dev

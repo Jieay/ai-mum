@@ -160,8 +160,12 @@ Authorization: {api_key}
 响应使用 `serde_json::Value` 动态解析，字段通过 `.get("fieldName")` 提取，避免类型不匹配导致解析失败。
 
 关键映射：
-- `TOKENS_LIMIT`（按 `nextResetTime` 排序）→ 第一个 = 5 小时额度，第二个 = 每周额度
-- `TIME_LIMIT` → MCP 月额度（`currentValue` = 已用，`usage` = 总量，`remaining` = 剩余）
+- 所有额度均通过 `unit` + `number` 字段识别：
+  - `(unit = 6, number = 1)` → 每周额度
+  - `(unit = 3, number = 5)` → 5 小时额度
+  - `(unit = 5, number = 1)` → MCP 月额度
+- `TOKENS_LIMIT` 展示顺序保持 5 小时在前、每周在后
+- `TIME_LIMIT` 数据字段：`currentValue` = 已用，`usage` = 总量，`remaining` = 剩余
 - `nextResetTime` 为毫秒时间戳（i64），转为 ISO 8601 字符串传给前端
 
 ## Kimi Code API
@@ -198,6 +202,7 @@ Authorization: Bearer {api_key}
 ## 常用开发命令
 
 ```bash
+make                 # 显示所有可用命令
 make install-deps    # 安装依赖
 make dev             # 开发模式（热重载）
 make check           # 编译检查（Rust + TypeScript）
